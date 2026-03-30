@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KimiHelper - 次世代Discord BOT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --accent: #06b6d4;
+            --dark-bg: #0a0a0f;
+            --card-bg: #13131f;
+            --card-hover: #1a1a2e;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --glow-primary: 0 0 40px rgba(99, 102, 241, 0.3);
+            --glow-secondary: 0 0 40px rgba(236, 72, 153, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.1) 0%, transparent 40%);
+            animation: bgMove 20s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 0.6rem 1.5rem;
+            background: var(--gradient-1);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            box-shadow: var(--glow-primary);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 5rem;
+            position: relative;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: var(--gradient-1);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: var(--glow-primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-3px);
+        }
+
+        /* Features Grid */
+        .features {
+            padding: 6rem 5%;
+            background: linear-gradient(to bottom, transparent, rgba(99, 102, 241, 0.05));
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: var(--card-hover);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-icon::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.2;
+        }
+
+        .feature-card:nth-child(1) .feature-icon { background: var(--gradient-1); }
+        .feature-card:nth-child(2) .feature-icon { background: var(--gradient-2); }
+        .feature-card:nth-child(3) .feature-icon { background: var(--gradient-3); }
+        .feature-card:nth-child(4) .feature-icon { background: var(--gradient-4); }
+        .feature-card:nth-child(5) .feature-icon { background: var(--gradient-5); }
+        .feature-card:nth-child(6) .feature-icon { background: var(--gradient-1); }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .feature-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 0.3rem 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        /* Anti-Raid Section */
+        .antiraid {
+            padding: 6rem 5%;
+            position: relative;
+        }
+
+        .antiraid-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .antiraid-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.8rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .antiraid-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .antiraid-card:hover::after {
+            opacity: 1;
+        }
+
+        .antiraid-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .antiraid-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .antiraid-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #fca5a5;
+        }
+
+        .antiraid-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .punishment {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .punishment::before {
+            content: '⚡';
+        }
+
+        /* Commands Preview */
+        .commands {
+            padding: 6rem 5%;
+            background: linear-gradient(to bottom, rgba(99, 102, 241, 0.05), transparent);
+        }
+
+        .command-preview {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .command-header {
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #eab308; }
+        .dot-green { background: #22c55e; }
+
+        .command-body {
+            padding: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 2;
+        }
+
+        .command-line {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .command-line:last-child {
+            border-bottom: none;
+        }
+
+        .cmd {
+            color: #60a5fa;
+            font-weight: 600;
+            min-width: 140px;
+        }
+
+        .cmd-desc {
+            color: var(--text-secondary);
+        }
+
+        .cmd-tag {
+            margin-left: auto;
+            padding: 0.2rem 0.6rem;
+            background: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 6rem 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-box {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--gradient-1);
+            opacity: 0.05;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Scroll Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero-stats { flex-direction: column; gap: 1.5rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .antiraid-grid { grid-template-columns: 1fr; }
+            .command-line { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+            .cmd-tag { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <img src="https://raw.githubusercontent.com/bananeko12345/KimiHelper/refs/heads/main/image_c1f77727.png?token=GHSAT0AAAAAADY7TFNFWVZCVS63XB5W25OK2OKKCIA" alt="KimiHelper">
+            KimiHelper
+        </div>
+        <ul class="nav-links">
+            <li><a href="#features">機能</a></li>
+            <li><a href="#antiraid">荒らし対策</a></li>
+            <li><a href="#commands">コマンド</a></li>
+            <li><a href="https://discord.com/oauth2/authorize?client_id=1488116413058125925&permissions=8&integration_type=0&scope=bot" class="nav-cta">導入する</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>🚀</span> Discord ToS準拠の次世代BOT
+            </div>
+            <h1>サーバー管理を<br><span>革新する</span></h1>
+            <p class="hero-description">
+                レベリング、荒らし対策、チケット管理、ロール操作...<br>
+                必要な機能が全て詰まった、一台五役の多機能BOT
+            </p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">10+</div>
+                    <div class="stat-label">充実機能</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">安定稼働</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">0円</div>
+                    <div class="stat-label">無料利用</div>
+                </div>
+            </div>
+            <div class="hero-buttons">
+                <a href="https://discord.com/oauth2/authorize?client_id=1488116413058125925&permissions=8&integration_type=0&scope=bot" class="btn-primary">
+                    <span>⚡</span> 今すぐ導入
+                </a>
+                <a href="#features" class="btn-secondary">
+                    <span>📖</span> 機能を見る
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header fade-in">
+            <h2>🎯 充実の機能一覧</h2>
+            <p>サーバー運営に必要な機能を全て搭載</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📈</div>
+                <h3>レベリングシステム</h3>
+                <p>チャットするだけで自動的にXPが溜まり、レベルアップ！サーバーの活性度が可視化され、モチベーション向上に貢献します。</p>
+                <div class="feature-tags">
+                    <span class="tag">/rank</span>
+                    <span class="tag">/leaderboard</span>
+                    <span class="tag">自動付与</span>
+                </div>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🛡️</div>
+                <h3>5重の荒らし対策</h3>
+                <p>アンチレイド、ロックダウン、スローモード、一括削除、BAN/Kick/Timeout...プロ級のセキュリティでサーバーを守ります。</p>
+                <div class="feature-tags">
+                    <span class="tag">/antiraid</span>
+                    <span class="tag">/lockdown</span>
+                    <span class="tag">自動検知</span>
+                </div>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🎫</div>
+                <h3>チケットシステム</h3>
+                <p>ボタン一つでプライベートチャンネルを作成。サポート対応を効率化し、ユーザーの問い合わせを適切に管理できます。</p>
+                <div class="feature-tags">
+                    <span class="tag">/ticket setup</span>
+                    <span class="tag">/ticket close</span>
+                    <span class="tag">自動削除</span>
+                </div>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🎭</div>
+                <h3>ロール管理</h3>
+                <p>個別付与から一括操作まで、直感的なコマンドでロールを管理。作成・削除・全員付与もワンコマンドで完了します。</p>
+                <div class="feature-tags">
+                    <span class="tag">/role add</span>
+                    <span class="tag">/role all</span>
+                    <span class="tag">一括操作</span>
+                </div>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📊</div>
+                <h3>投票機能</h3>
+                <p>最大10選択肢対応の高度な投票システム。リアルタイムで結果が反映され、民主的な意思決定をサポートします。</p>
+                <div class="feature-tags">
+                    <span class="tag">/poll</span>
+                    <span class="tag">リアルタイム</span>
+                    <span class="tag">自動締切</span>
+                </div>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">👋</div>
+                <h3>Welcome/Leave</h3>
+                <p>カスタマイズ可能な入退室メッセージ。変数対応で柔軟な設定が可能で、サーバーの雰囲気作りに最適です。</p>
+                <div class="feature-tags">
+                    <span class="tag">/welcome</span>
+                    <span class="tag">/leave</span>
+                    <span class="tag">DM通知</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Anti-Raid Section -->
+    <section class="antiraid" id="antiraid">
+        <div class="section-header fade-in">
+            <h2>🛡️ プロ級荒らし対策</h2>
+            <p>5つの検出システムでサーバーを24時間365日守ります</p>
+        </div>
+        <div class="antiraid-grid">
+            <div class="antiraid-card fade-in">
+                <div class="antiraid-icon">💬</div>
+                <h4>メッセージスパム検出</h4>
+                <p>7秒間に4件以上のメッセージを検出</p>
+                <div class="punishment">1分→5分→1時間の累進タイムアウト</div>
+            </div>
+            <div class="antiraid-card fade-in">
+                <div class="antiraid-icon">📊</div>
+                <h4>投票スパム検出</h4>
+                <p>1分以内に3回の投票作成を検出</p>
+                <div class="punishment">3時間のタイムアウト</div>
+            </div>
+            <div class="antiraid-card fade-in">
+                <div class="antiraid-icon">🔗</div>
+                <h4>招待リンクブロック</h4>
+                <p>許可されていないチャンネルでの招待リンク検出</p>
+                <div class="punishment">自動削除 + 警告</div>
+            </div>
+            <div class="antiraid-card fade-in">
+                <div class="antiraid-icon">👥</div>
+                <h4>メンションスパム検出</h4>
+                <p>10秒間に3回以上のメンションを検出</p>
+                <div class="punishment">10分のタイムアウト</div>
+            </div>
+            <div class="antiraid-card fade-in">
+                <div class="antiraid-icon">📢</div>
+                <h4>@everyone 検出</h4>
+                <p>管理者以外が@everyoneを使用</p>
+                <div class="punishment">30分のタイムアウト</div>
+            </div>
+            <div class="antiraid-card fade-in">
+                <div class="antiraid-icon">🎵</div>
+                <h4>VCスパム検出</h4>
+                <p>10秒間に3回のVC入室を検出</p>
+                <div class="punishment">10分のタイムアウト</div>
+            </div>
+            <div class="antiraid-card fade-in">
+                <div class="antiraid-icon">🚀</div>
+                <h4>アンチレイド</h4>
+                <p>短時間の大量参加を検出・自動保護</p>
+                <div class="punishment">自動ロックダウン + 通知</div>
+            </div>
+            <div class="antiraid-card fade-in">
+                <div class="antiraid-icon">🧹</div>
+                <h4>一括削除</h4>
+                <p>特定ユーザーのメッセージを一括削除</p>
+                <div class="punishment">最大100件を即座に削除</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commands Preview -->
+    <section class="commands" id="commands">
+        <div class="section-header fade-in">
+            <h2>⌨️ 直感的なスラッシュコマンド</h2>
+            <p>全機能をスラッシュコマンドで簡単操作</p>
+        </div>
+        <div class="command-preview fade-in">
+            <div class="command-header">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+                <span style="margin-left: 1rem; color: var(--text-secondary); font-size: 0.85rem;">KimiHelper Commands</span>
+            </div>
+            <div class="command-body">
+                <div class="command-line">
+                    <span class="cmd">/serverinfo</span>
+                    <span class="cmd-desc">サーバーの詳細情報を表示</span>
+                    <span class="cmd-tag">一般</span>
+                </div>
+                <div class="command-line">
+                    <span class="cmd">/userinfo</span>
+                    <span class="cmd-desc">ユーザーの詳細情報を表示</span>
+                    <span class="cmd-tag">一般</span>
+                </div>
+                <div class="command-line">
+                    <span class="cmd">/rank</span>
+                    <span class="cmd-desc">自分のレベルとランクを確認</span>
+                    <span class="cmd-tag">レベル</span>
+                </div>
+                <div class="command-line">
+                    <span class="cmd">/leaderboard</span>
+                    <span class="cmd-desc">サーバーのレベルランキング</span>
+                    <span class="cmd-tag">レベル</span>
+                </div>
+                <div class="command-line">
+                    <span class="cmd">/poll</span>
+                    <span class="cmd-desc">複数選択肢対応の投票を作成</span>
+                    <span class="cmd-tag">ユーティリティ</span>
+                </div>
+                <div class="command-line">
+                    <span class="cmd">/ticket setup</span>
+                    <span class="cmd-desc">チケットパネルを設置</span>
+                    <span class="cmd-tag">管理</span>
+                </div>
+                <div class="command-line">
+                    <span class="cmd">/antiraid enable</span>
+                    <span class="cmd-desc">アンチレイドを有効化</span>
+                    <span class="cmd-tag">保護</span>
+                </div>
+                <div class="command-line">
+                    <span class="cmd">/lockdown</span>
+                    <span class="cmd-desc">チャンネルをロック/解除</span>
+                    <span class="cmd-tag">保護</span>
+                </div>
+                <div class="command-line">
+                    <span class="cmd">/slowmode</span>
+                    <span class="cmd-desc">スローモードを設定</span>
+                    <span class="cmd-tag">保護</span>
+                </div>
+                <div class="command-line">
+                    <span class="cmd">/clear</span>
+                    <span class="cmd-desc">メッセージを一括削除</span>
+                    <span class="cmd-tag">管理</span>
+                </div>
+                <div class="command-line">
+                    <span class="cmd">/role add</span>
+                    <span class="cmd-desc">ロールを付与</span>
+                    <span class="cmd-tag">ロール</span>
+                </div>
+                <div class="command-line">
+                    <span class="cmd">/welcome setup</span>
+                    <span class="cmd-desc">Welcomeメッセージを設定</span>
+                    <span class="cmd-tag">設定</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-box fade-in">
+            <h2>🚀 今すぐ始めよう</h2>
+            <p>Discord ToS準拠の安全なBOTで、サーバー管理を次のレベルへ</p>
+            <a href="https://discord.com/oauth2/authorize?client_id=1488116413058125925&permissions=8&integration_type=0&scope=bot" class="btn-primary" style="margin-top: 1rem;">
+                <span>⚡</span> KimiHelperを導入
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <ul class="footer-links">
+            <li><a href="#">利用規約</a></li>
+            <li><a href="#">プライバシーポリシー</a></li>
+            <li><a href="#">サポートサーバー</a></li>
+            <li><a href="#">GitHub</a></li>
+        </ul>
+        <p>© 2025 KimiHelper. All rights reserved. Discord ToS準拠の安全なBOTです。</p>
+    </footer>
+
+    <script>
+        // Scroll Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Parallax Effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.bg-animation::before');
+            if (parallax) {
+                parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
