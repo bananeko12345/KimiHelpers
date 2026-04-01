@@ -28,8 +28,10 @@
             --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
             --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --gradient-kaso: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
             --glow-primary: 0 0 40px rgba(99, 102, 241, 0.3);
             --glow-secondary: 0 0 40px rgba(236, 72, 153, 0.3);
+            --discord-blurple: #5865F2;
         }
 
         body {
@@ -108,6 +110,7 @@
             display: flex;
             gap: 2rem;
             list-style: none;
+            align-items: center;
         }
 
         .nav-links a {
@@ -153,6 +156,34 @@
         .nav-cta:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Discord Server Button */
+        .discord-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.6rem 1.2rem;
+            background: var(--discord-blurple);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.3);
+        }
+
+        .discord-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(88, 101, 242, 0.5);
+            background: #4752C4;
+        }
+
+        .discord-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
         }
 
         /* Hero Section */
@@ -378,6 +409,7 @@
         .feature-card:nth-child(4) .feature-icon { background: var(--gradient-4); }
         .feature-card:nth-child(5) .feature-icon { background: var(--gradient-5); }
         .feature-card:nth-child(6) .feature-icon { background: var(--gradient-1); }
+        .feature-card:nth-child(7) .feature-icon { background: var(--gradient-kaso); }
 
         .feature-card h3 {
             font-size: 1.3rem;
@@ -405,6 +437,20 @@
             font-size: 0.75rem;
             color: var(--text-secondary);
             border: 1px solid var(--border);
+        }
+
+        /* KASO Feature Special Styling */
+        .kaso-card {
+            border-color: rgba(255, 107, 107, 0.3);
+        }
+
+        .kaso-card:hover {
+            border-color: rgba(255, 107, 107, 0.6);
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.2);
+        }
+
+        .kaso-card::before {
+            background: var(--gradient-kaso) !important;
         }
 
         /* Anti-Raid Section */
@@ -549,6 +595,12 @@
             min-width: 140px;
         }
 
+        .cmd-kaso {
+            color: #ff6b6b;
+            font-weight: 600;
+            min-width: 140px;
+        }
+
         .cmd-desc {
             color: var(--text-secondary);
         }
@@ -558,6 +610,15 @@
             padding: 0.2rem 0.6rem;
             background: rgba(99, 102, 241, 0.2);
             color: #818cf8;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .cmd-tag-kaso {
+            margin-left: auto;
+            padding: 0.2rem 0.6rem;
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
             border-radius: 4px;
             font-size: 0.75rem;
         }
@@ -612,6 +673,114 @@
             z-index: 1;
         }
 
+        /* Discord Server Section */
+        .discord-server {
+            padding: 4rem 5%;
+            background: linear-gradient(to bottom, transparent, rgba(88, 101, 242, 0.05));
+        }
+
+        .discord-box {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 3rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .discord-box:hover {
+            border-color: rgba(88, 101, 242, 0.5);
+            box-shadow: 0 20px 40px rgba(88, 101, 242, 0.2);
+        }
+
+        .discord-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #5865F2, #7289DA);
+        }
+
+        .discord-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #5865F2 0%, #7289DA 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 10px 30px rgba(88, 101, 242, 0.4);
+        }
+
+        .discord-box h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .discord-box p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .discord-join-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1rem 2.5rem;
+            background: var(--discord-blurple);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 0 30px rgba(88, 101, 242, 0.4);
+        }
+
+        .discord-join-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(88, 101, 242, 0.6);
+            background: #4752C4;
+        }
+
+        .discord-join-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .discord-features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .discord-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .discord-feature::before {
+            content: '✓';
+            color: #22c55e;
+            font-weight: bold;
+        }
+
         /* Footer */
         footer {
             padding: 3rem 5%;
@@ -659,7 +828,8 @@
             .features-grid { grid-template-columns: 1fr; }
             .antiraid-grid { grid-template-columns: 1fr; }
             .command-line { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
-            .cmd-tag { margin-left: 0; }
+            .cmd-tag, .cmd-tag-kaso { margin-left: 0; }
+            .discord-features { flex-direction: column; gap: 1rem; }
         }
     </style>
 <base target="_blank">
@@ -677,6 +847,14 @@
             <li><a href="#features">機能</a></li>
             <li><a href="#antiraid">荒らし対策</a></li>
             <li><a href="#commands">コマンド</a></li>
+            <li>
+                <a href="https://discord.gg/bDhwkYE5TE" class="discord-btn">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                    サポートサーバー
+                </a>
+            </li>
             <li><a href="https://discord.com/oauth2/authorize?client_id=1488116413058125925&permissions=8&integration_type=0&scope=bot" class="nav-cta">導入する</a></li>
         </ul>
     </nav>
@@ -694,7 +872,7 @@
             </p>
             <div class="hero-stats">
                 <div class="stat">
-                    <div class="stat-value">10+</div>
+                    <div class="stat-value">11+</div>
                     <div class="stat-label">充実機能</div>
                 </div>
                 <div class="stat">
@@ -712,6 +890,12 @@
                 </a>
                 <a href="#features" class="btn-secondary">
                     <span>📖</span> 機能を見る
+                </a>
+                <a href="https://discord.gg/bDhwkYE5TE" class="discord-btn" style="padding: 1rem 2.5rem; font-size: 1.1rem;">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;">
+                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                    Discordサーバーに参加
                 </a>
             </div>
         </div>
@@ -782,6 +966,18 @@
                     <span class="tag">/welcome</span>
                     <span class="tag">/leave</span>
                     <span class="tag">DM通知</span>
+                </div>
+            </div>
+            <!-- NEW: KASO Feature -->
+            <div class="feature-card fade-in kaso-card">
+                <div class="feature-icon">📉</div>
+                <h3>過疎化チェック</h3>
+                <p>サーバーの活動状況をリアルタイムで分析。過疎度スコア、メッセージ頻度、オンライン率をパネル形式で可視化します。</p>
+                <div class="feature-tags">
+                    <span class="tag">/kaso check</span>
+                    <span class="tag">/kaso detail</span>
+                    <span class="tag">/kaso refresh</span>
+                    <span class="tag">分析</span>
                 </div>
             </div>
         </div>
@@ -879,6 +1075,22 @@
                     <span class="cmd-desc">サーバーのレベルランキング</span>
                     <span class="cmd-tag">レベル</span>
                 </div>
+                <!-- NEW: KASO Commands -->
+                <div class="command-line">
+                    <span class="cmd-kaso">/kaso check</span>
+                    <span class="cmd-desc">過疎化パネルを表示（スコア・経過時間・活動状況）</span>
+                    <span class="cmd-tag-kaso">分析</span>
+                </div>
+                <div class="command-line">
+                    <span class="cmd-kaso">/kaso detail</span>
+                    <span class="cmd-desc">詳細な過疎化分析（チャンネル別・傾向分析）</span>
+                    <span class="cmd-tag-kaso">分析</span>
+                </div>
+                <div class="command-line">
+                    <span class="cmd-kaso">/kaso refresh</span>
+                    <span class="cmd-desc">最新データで過疎化チェックを更新</span>
+                    <span class="cmd-tag-kaso">分析</span>
+                </div>
                 <div class="command-line">
                     <span class="cmd">/poll</span>
                     <span class="cmd-desc">複数選択肢対応の投票を作成</span>
@@ -923,14 +1135,50 @@
         </div>
     </section>
 
+    <!-- Discord Server Section -->
+    <section class="discord-server">
+        <div class="section-header fade-in">
+            <h2>💬 サポートサーバー</h2>
+            <p>質問・要望・バグ報告はこちらから</p>
+        </div>
+        <div class="discord-box fade-in">
+            <div class="discord-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 40px; height: 40px; fill: white;">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                </svg>
+            </div>
+            <h3>KimiHelper サポートサーバー</h3>
+            <p>Botの使い方、トラブルシューティング、最新情報の配信を行っています。<br>気軽に参加してください！</p>
+            <a href="https://discord.gg/bDhwkYE5TE" class="discord-join-btn">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                </svg>
+                サーバーに参加する
+            </a>
+            <div class="discord-features">
+                <span class="discord-feature">技術サポート</span>
+                <span class="discord-feature">アップデート情報</span>
+                <span class="discord-feature">コミュニティ</span>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="cta">
         <div class="cta-box fade-in">
             <h2>🚀 今すぐ始めよう</h2>
             <p>Discord ToS準拠の安全なBOTで、サーバー管理を次のレベルへ</p>
-            <a href="https://discord.com/oauth2/authorize?client_id=1488116413058125925&permissions=8&integration_type=0&scope=bot" class="btn-primary" style="margin-top: 1rem;">
-                <span>⚡</span> KimiHelperを導入
-            </a>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="https://discord.com/oauth2/authorize?client_id=1488116413058125925&permissions=8&integration_type=0&scope=bot" class="btn-primary" style="margin-top: 1rem;">
+                    <span>⚡</span> KimiHelperを導入
+                </a>
+                <a href="https://discord.gg/bDhwkYE5TE" class="discord-btn" style="margin-top: 1rem; padding: 1rem 2rem;">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
+                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                    サポートサーバーに参加
+                </a>
+            </div>
         </div>
     </section>
 
@@ -939,10 +1187,10 @@
         <ul class="footer-links">
             <li><a href="#">利用規約</a></li>
             <li><a href="#">プライバシーポリシー</a></li>
-            <li><a href="https://discord.gg/bXs6S4mN3k" target="_blank">サポートサーバー</a></li>
+            <li><a href="https://discord.gg/bDhwkYE5TE" target="_blank">サポートサーバー</a></li>
             <li><a href="#">GitHub</a></li>
         </ul>
-        <p>© 2025 KimiHelper. All rights reserved. Discord ToS準拠の安全なBOTです。</p>
+        <p>© 2026 KimiHelper. All rights reserved. Discord ToS準拠の安全なBOTです。</p>
     </footer>
 
     <script>
